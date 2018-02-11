@@ -2,11 +2,25 @@
 parameters:
     database_host: 127.0.0.1
     database_port: null
-    database_name: symfony
+    database_name: ebaysniper
     database_user: root
-    database_password: null
+    database_password: root
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: null
     mailer_password: null
     secret: 6f267a5cb308cd88b7f9b6fb6f85175d7dcb8021
+    ebay:
+      apiVersion: '1027'
+      credentials:
+        sandbox:
+          appId: 'RodrigoD-Sniper-SBX-15d8a3c47-e9af0ddb'
+          devId: 'ce38d005-b839-493c-82ba-efdc20a519cd'
+          certId: 'SBX-5d8a3c4799cc-54e4-4d61-aebf-4a59'
+        prod:
+          appId: 'RodrigoD-Sniper-PRD-a5d8a3c47-b5b29b79'
+          devId: 'ce38d005-b839-493c-82ba-efdc20a519cd'
+          certId: 'PRD-5d8a3c4753ce-49ae-4c78-9ad9-013c'
+
+
+
