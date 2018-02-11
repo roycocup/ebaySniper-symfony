@@ -31,6 +31,7 @@ class HomeController extends Controller
 
     /**
      * @Route("/")
+     * https://github.com/davidtsadler/ebay-sdk-examples/blob/master/shopping/02-get-single-item.php
      */
     public function indexAction(Request $request)
     {
