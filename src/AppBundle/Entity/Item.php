@@ -24,7 +24,7 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="ItemEbayId", type="string", length=255)
+     * @ORM\Column(name="ItemEbayId", type="string", length=255, unique=true)
      */
     private $itemEbayId;
 

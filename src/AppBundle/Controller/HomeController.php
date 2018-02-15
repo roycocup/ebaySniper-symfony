@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\AppBundle;
 use AppBundle\Entity\Item;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -46,11 +47,17 @@ class HomeController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $item = $form->getData();
-             $em = $this->getDoctrine()->getManager();
-             $em->persist($item);
-             $em->flush();
 
-            return $this->redirectToRoute('app_home_getitem', ['item'=>$item->getId()]);
+            $em = $this->getDoctrine()->getManager();
+
+            $exists = $em->getRepository(Item::class)->findOneByItemEbayId($item->getItemEbayId());
+            if (!$exists){
+                $em->persist($item);
+                $em->flush();
+                return $this->redirectToRoute('app_home_getitem', ['item'=>$item->getId()]);
+            }
+            
+            return $this->redirectToRoute('app_home_getitem', ['item'=>$exists->getId()]);
         }
 
         return $this->render('index/itemSearch.html.twig', array(
@@ -84,12 +91,12 @@ class HomeController extends Controller
         }
 
         if ($response->Ack !== 'Failure') {
-            $item = $response->Item;
+            $ebayItem = $response->Item;
+            dump($ebayItem); die;
             print("$item->Title\n");
             printf(
-                "Quantity sold %s, quantiy available %s<br>",
-                $item->QuantitySold,
-                $item->Quantity - $item->QuantitySold
+                "Quantity sold %s, quantity available %s<br>",
+                $item->QuantitySold,$item->Quantity - $item->QuantitySold
             );
             if (isset($item->ItemSpecifics)) {
                 print("<br>This item has the following item specifics:<br><br>");
