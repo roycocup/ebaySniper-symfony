@@ -3,12 +3,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Item;
-use DTS\eBaySDK\Sdk;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use \DTS\eBaySDK\Shopping\Services;
 use \DTS\eBaySDK\Shopping\Types;
@@ -47,13 +45,12 @@ class HomeController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $itemEbayId = $form->getData();
-            dump($itemEbayId); die;
-            // $em = $this->getDoctrine()->getManager();
-            // $em->persist($task);
-            // $em->flush();
+            $item = $form->getData();
+             $em = $this->getDoctrine()->getManager();
+             $em->persist($item);
+             $em->flush();
 
-            return $this->redirectToRoute('app_home_result');
+            return $this->redirectToRoute('app_home_getitem', ['item'=>$item->getId()]);
         }
 
         return $this->render('index/itemSearch.html.twig', array(
@@ -62,9 +59,9 @@ class HomeController extends Controller
     }
 
     /**
-     * @Route("/result")
+     * @Route("/getItem/{item}")
      */
-    public function resultAction(Request $request)
+    public function getItemAction(Item $item)
     {
         $config = $this->getConfig();
 
@@ -72,7 +69,7 @@ class HomeController extends Controller
         $service = new Services\ShoppingService($config);
 
         $request = new Types\GetSingleItemRequestType();
-        $request->ItemID = '263490811953';
+        $request->ItemID = $item->getItemEbayId();
         $response = $service->getSingleItem($request);
 
         if (isset($response->Errors)) {

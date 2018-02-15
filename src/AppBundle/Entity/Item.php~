@@ -38,7 +38,7 @@ class Item
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updated", type="datetime", nullable=true)
+     * @ORM\Column(name="updated", type="datetime")
      */
     private $updated;
 
@@ -125,3 +125,4 @@ class Item
         return $this->updated;
     }
 }
+
