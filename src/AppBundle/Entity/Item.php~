@@ -24,9 +24,34 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="ItemEbayId", type="string", length=255)
+     * @ORM\Column(name="ItemId", type="string", length=255, unique=true)
      */
-    private $itemEbayId;
+    private $itemId;
+
+    /**
+     * @ORM\Column(name="endTime", type="datetime", nullable=true)
+     */
+    private $endTime;
+
+    /**
+     * @ORM\Column(name="galleryURL", type="string", length=255)
+     */
+    private $galleryURL;
+
+    /**
+     * @ORM\Column(name="title", type="string", length=255)
+     */
+    private $title;
+
+    /**
+     * @ORM\Column(name="country", type="string", length=255)
+     */
+    private $country;
+
+    /**
+     * @ORM\Column(name="primaryCategoryName", type="string", length=255)
+     */
+    private $primaryCategoryName;
 
     /**
      * @var \DateTime
@@ -38,91 +63,9 @@ class Item
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updated", type="datetime")
+     * @ORM\Column(name="updated", type="datetime", nullable=true)
      */
     private $updated;
 
 
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set itemEbayId
-     *
-     * @param string $itemEbayId
-     *
-     * @return Item
-     */
-    public function setItemEbayId($itemEbayId)
-    {
-        $this->itemEbayId = $itemEbayId;
-
-        return $this;
-    }
-
-    /**
-     * Get itemEbayId
-     *
-     * @return string
-     */
-    public function getItemEbayId()
-    {
-        return $this->itemEbayId;
-    }
-
-    /**
-     * Set created
-     *
-     * @param \DateTime $created
-     *
-     * @return Item
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     *
-     * @return Item
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
 }
-

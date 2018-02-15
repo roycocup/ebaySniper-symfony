@@ -24,9 +24,34 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="ItemEbayId", type="string", length=255, unique=true)
+     * @ORM\Column(name="ItemId", type="string", length=255, unique=true)
      */
-    private $itemEbayId;
+    private $itemId;
+
+    /**
+     * @ORM\Column(name="endTime", type="datetime", nullable=true)
+     */
+    private $endTime;
+
+    /**
+     * @ORM\Column(name="galleryURL", type="string", length=255)
+     */
+    private $galleryURL;
+
+    /**
+     * @ORM\Column(name="title", type="string", length=255)
+     */
+    private $title;
+
+    /**
+     * @ORM\Column(name="country", type="string", length=255)
+     */
+    private $country;
+
+    /**
+     * @ORM\Column(name="primaryCategoryName", type="string", length=255)
+     */
+    private $primaryCategoryName;
 
     /**
      * @var \DateTime
@@ -43,10 +68,11 @@ class Item
     private $updated;
 
 
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -54,27 +80,147 @@ class Item
     }
 
     /**
-     * Set itemEbayId
+     * Set itemId
      *
-     * @param string $itemEbayId
+     * @param string $itemId
      *
      * @return Item
      */
-    public function setItemEbayId($itemEbayId)
+    public function setItemId($itemId)
     {
-        $this->itemEbayId = $itemEbayId;
+        $this->itemId = $itemId;
 
         return $this;
     }
 
     /**
-     * Get itemEbayId
+     * Get itemId
      *
      * @return string
      */
-    public function getItemEbayId()
+    public function getItemId()
     {
-        return $this->itemEbayId;
+        return $this->itemId;
+    }
+
+    /**
+     * Set endTime
+     *
+     * @param \DateTime $endTime
+     *
+     * @return Item
+     */
+    public function setEndTime($endTime)
+    {
+        $this->endTime = $endTime;
+
+        return $this;
+    }
+
+    /**
+     * Get endTime
+     *
+     * @return \DateTime
+     */
+    public function getEndTime()
+    {
+        return $this->endTime;
+    }
+
+    /**
+     * Set galleryURL
+     *
+     * @param string $galleryURL
+     *
+     * @return Item
+     */
+    public function setGalleryURL($galleryURL)
+    {
+        $this->galleryURL = $galleryURL;
+
+        return $this;
+    }
+
+    /**
+     * Get galleryURL
+     *
+     * @return string
+     */
+    public function getGalleryURL()
+    {
+        return $this->galleryURL;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return Item
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     *
+     * @return Item
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * Set primaryCategoryName
+     *
+     * @param string $primaryCategoryName
+     *
+     * @return Item
+     */
+    public function setPrimaryCategoryName($primaryCategoryName)
+    {
+        $this->primaryCategoryName = $primaryCategoryName;
+
+        return $this;
+    }
+
+    /**
+     * Get primaryCategoryName
+     *
+     * @return string
+     */
+    public function getPrimaryCategoryName()
+    {
+        return $this->primaryCategoryName;
     }
 
     /**

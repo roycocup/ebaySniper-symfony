@@ -39,7 +39,7 @@ class HomeController extends Controller
         $item->setCreated(new \DateTime());
 
         $form = $this->createFormBuilder($item)
-            ->add('itemEbayId', TextType::class)
+            ->add('itemId', TextType::class)
             ->add('save', SubmitType::class, array('label' => 'Get Item'))
             ->getForm();
 
@@ -50,13 +50,13 @@ class HomeController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $exists = $em->getRepository(Item::class)->findOneByItemEbayId($item->getItemEbayId());
+            $exists = $em->getRepository(Item::class)->findOneByItemId($item->getItemId());
             if (!$exists){
                 $em->persist($item);
                 $em->flush();
                 return $this->redirectToRoute('app_home_getitem', ['item'=>$item->getId()]);
             }
-            
+
             return $this->redirectToRoute('app_home_getitem', ['item'=>$exists->getId()]);
         }
 
@@ -76,7 +76,7 @@ class HomeController extends Controller
         $service = new Services\ShoppingService($config);
 
         $request = new Types\GetSingleItemRequestType();
-        $request->ItemID = $item->getItemEbayId();
+        $request->ItemID = $item->getItemId();
         $response = $service->getSingleItem($request);
 
         if (isset($response->Errors)) {
@@ -92,62 +92,18 @@ class HomeController extends Controller
 
         if ($response->Ack !== 'Failure') {
             $ebayItem = $response->Item;
+
+            $em = $this->getDoctrine()->getManager();
+            $item->setCountry($ebayItem->Country);
+            $item->setEndTime($ebayItem->EndTime);
+            $item->setTitle($ebayItem->Title);
+            $item->setGalleryURL($ebayItem->GalleryURL);
+            $item->setPrimaryCategoryName($ebayItem->PrimaryCategoryName);
+            $item->setUpdated(new \DateTime());
+            $em->persist($item);
+            $em->flush();
             dump($ebayItem); die;
-            print("$item->Title\n");
-            printf(
-                "Quantity sold %s, quantity available %s<br>",
-                $item->QuantitySold,$item->Quantity - $item->QuantitySold
-            );
-            if (isset($item->ItemSpecifics)) {
-                print("<br>This item has the following item specifics:<br><br>");
-                foreach ($item->ItemSpecifics->NameValueList as $nameValues) {
-                    printf(
-                        "%s: %s<br>",
-                        $nameValues->Name,
-                        implode(', ', iterator_to_array($nameValues->Value))
-                    );
-                }
-            }
-            if (isset($item->Variations)) {
-                print("<br>This item has the following variations:<br>");
-                foreach ($item->Variations->Variation as $variation) {
-                    printf(
-                        "<br>SKU: %s<br>Start Price: %s<br>",
-                        $variation->SKU,
-                        $variation->StartPrice->value
-                    );
-                    printf(
-                        "Quantity sold %s, quantiy available %s<br>",
-                        $variation->SellingStatus->QuantitySold,
-                        $variation->Quantity - $variation->SellingStatus->QuantitySold
-                    );
-                    foreach ($variation->VariationSpecifics as $specific) {
-                        foreach ($specific->NameValueList as $nameValues) {
-                            printf(
-                                "%s: %s<br>",
-                                $nameValues->Name,
-                                implode(', ', iterator_to_array($nameValues->Value))
-                            );
-                        }
-                    }
-                }
-            }
-            if (isset($item->ItemCompatibilityCount)) {
-                printf("<br>This item is compatible with %s vehicles:<br><br>", $item->ItemCompatibilityCount);
-                // Only show the first 3.
-                $limit = min($item->ItemCompatibilityCount, 3);
-                for ($x = 0; $x < $limit; $x++) {
-                    $compatibility = $item->ItemCompatibilityList->Compatibility[$x];
-                    foreach ($compatibility->NameValueList as $nameValues) {
-                        printf(
-                            "%s: %s\n",
-                            $nameValues->Name,
-                            implode(', ', iterator_to_array($nameValues->Value))
-                        );
-                    }
-                    printf("Notes: %s \n", $compatibility->CompatibilityNotes);
-                }
-            }
+            
         }
 
         return $this->render('default/index.html.twig', ['data' => $data]);
