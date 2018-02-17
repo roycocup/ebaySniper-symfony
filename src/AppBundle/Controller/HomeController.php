@@ -128,11 +128,14 @@ class HomeController extends Controller
                 $em->flush();
             }
 
-            dump($ebayItem); die;
-
         }
+        $dateInterval = new \DateInterval($ebayItem->TimeLeft);
 
-        return $this->render('default/index.html.twig', ['data' => $data]);
+        return $this->render('index/itemDetail.html.twig', [
+            'ebayItem' => $ebayItem,
+            'timeleft' => $dateInterval,
+            'timeLeftSecs' => $ebayItem->EndTime->getTimestamp(),
+        ]);
 
     }
 

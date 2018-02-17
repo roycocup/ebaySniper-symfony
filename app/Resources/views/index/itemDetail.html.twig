@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-md-12">
+            menu
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6 col-md-offset-3 redborder">
+            <div class="row">
+                <div class="col-md-3 thumbnail">
+                    <img src="{{ ebayItem.GalleryURL }}" alt="">
+                </div>
+                <div class="col-md-9 title blueborder">
+                    {{ ebayItem.Title }} <br>
+                    bids: {{ ebayItem.BidCount }} price: £{{ ebayItem.ConvertedCurrentPrice.value }} <br>
+                    ends: {{ ebayItem.EndTime.format('d-m-Y H:i:s') }} <br>
+                    {#time left: {{ timeleft.format('%d days, %H hours, %m minutes, %s seconds') }} <br>#}
+                    Time left: <span id="timer">0 Days, 0 Hours, 0 Seconds</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        let T = new Timer({{ timeLeftSecs }}, "timer");
+        T.start();
+        //timer({{ timeLeftSecs }}, "timer");
+    </script>
+{% endblock %}
+
