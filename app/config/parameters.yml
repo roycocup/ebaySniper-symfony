@@ -12,6 +12,7 @@ parameters:
     secret: 6f267a5cb308cd88b7f9b6fb6f85175d7dcb8021
     ebay:
       apiVersion: '1027'
+      siteId: '3'
       credentials:
         sandbox:
           appId: 'RodrigoD-Sniper-SBX-15d8a3c47-e9af0ddb'

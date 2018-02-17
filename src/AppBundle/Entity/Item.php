@@ -24,7 +24,7 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="ItemId", type="string", length=255, unique=true)
+     * @ORM\Column(name="item_id", type="string", length=255, unique=true)
      */
     private $itemId;
 
@@ -34,7 +34,7 @@ class Item
     private $endTime;
 
     /**
-     * @ORM\Column(name="galleryURL", type="string", length=255)
+     * @ORM\Column(name="gallery_url", type="string", length=255)
      */
     private $galleryURL;
 
@@ -49,20 +49,46 @@ class Item
     private $country;
 
     /**
-     * @ORM\Column(name="primaryCategoryName", type="string", length=255)
+     * @ORM\Column(name="primary_category_id", type="integer")
+     */
+    private $primaryCategoryId;
+
+    /**
+     * @ORM\Column(name="primary_category_name", type="string", length=255)
      */
     private $primaryCategoryName;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created", type="datetime")
+     * @ORM\Column(name="bid_count", type="integer")
+     */
+    private $bidCount;
+
+    /**
+     * @ORM\Column(name="listing_status", type="string")
+     */
+    private $listingStatus;
+
+    /**
+     * @ORM\Column(name="time_left", type="string")
+     */
+    private $timeLeft;
+
+    /**
+     * @ORM\Column(name="auto_pay", type="boolean")
+     */
+    private $autoPay;
+
+    /**
+     * @ORM\Column(name="condition_name", type="string", length=10)
+     */
+    private $conditionName;
+
+    /**
+     * @ORM\Column(name="created", type="datetime", nullable=false)
      */
     private $created;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="updated", type="datetime", nullable=true)
      */
     private $updated;
@@ -200,6 +226,30 @@ class Item
     }
 
     /**
+     * Set primaryCategoryId
+     *
+     * @param integer $primaryCategoryId
+     *
+     * @return Item
+     */
+    public function setPrimaryCategoryId($primaryCategoryId)
+    {
+        $this->primaryCategoryId = $primaryCategoryId;
+
+        return $this;
+    }
+
+    /**
+     * Get primaryCategoryId
+     *
+     * @return integer
+     */
+    public function getPrimaryCategoryId()
+    {
+        return $this->primaryCategoryId;
+    }
+
+    /**
      * Set primaryCategoryName
      *
      * @param string $primaryCategoryName
@@ -221,6 +271,126 @@ class Item
     public function getPrimaryCategoryName()
     {
         return $this->primaryCategoryName;
+    }
+
+    /**
+     * Set bidCount
+     *
+     * @param integer $bidCount
+     *
+     * @return Item
+     */
+    public function setBidCount($bidCount)
+    {
+        $this->bidCount = $bidCount;
+
+        return $this;
+    }
+
+    /**
+     * Get bidCount
+     *
+     * @return integer
+     */
+    public function getBidCount()
+    {
+        return $this->bidCount;
+    }
+
+    /**
+     * Set listingStatus
+     *
+     * @param integer $listingStatus
+     *
+     * @return Item
+     */
+    public function setListingStatus($listingStatus)
+    {
+        $this->listingStatus = $listingStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get listingStatus
+     *
+     * @return integer
+     */
+    public function getListingStatus()
+    {
+        return $this->listingStatus;
+    }
+
+    /**
+     * Set timeLeft
+     *
+     * @param integer $timeLeft
+     *
+     * @return Item
+     */
+    public function setTimeLeft($timeLeft)
+    {
+        $this->timeLeft = $timeLeft;
+
+        return $this;
+    }
+
+    /**
+     * Get timeLeft
+     *
+     * @return integer
+     */
+    public function getTimeLeft()
+    {
+        return $this->timeLeft;
+    }
+
+    /**
+     * Set autoPay
+     *
+     * @param boolean $autoPay
+     *
+     * @return Item
+     */
+    public function setAutoPay($autoPay)
+    {
+        $this->autoPay = $autoPay;
+
+        return $this;
+    }
+
+    /**
+     * Get autoPay
+     *
+     * @return boolean
+     */
+    public function getAutoPay()
+    {
+        return $this->autoPay;
+    }
+
+    /**
+     * Set conditionName
+     *
+     * @param string $conditionName
+     *
+     * @return Item
+     */
+    public function setConditionName($conditionName)
+    {
+        $this->conditionName = $conditionName;
+
+        return $this;
+    }
+
+    /**
+     * Get conditionName
+     *
+     * @return string
+     */
+    public function getConditionName()
+    {
+        return $this->conditionName;
     }
 
     /**

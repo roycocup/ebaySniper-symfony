@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\AppBundle;
 use AppBundle\Entity\Item;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -15,16 +14,33 @@ use \DTS\eBaySDK\Shopping\Types;
 class HomeController extends Controller
 {
 
-    public function getConfig(): array {
+    public function getConfig($envio = 'sandbox'): array {
         $ebay = $this->getParameter('ebay');
-        $config = [
-            'apiVersion' => \DTS\eBaySDK\Shopping\Services\ShoppingService::API_VERSION,
-            'credentials' => [
+
+        $credentials = [];
+
+        if ($envio == 'sandbox'){
+            $credentials = [
+                'appId' => $ebay['credentials']['sandbox']['appId'],
+                'devId' => $ebay['credentials']['sandbox']['devId'],
+                'certId' => $ebay['credentials']['sandbox']['certId'],
+            ];
+        }
+
+        if ($envio == 'prod'){
+            $credentials = [
                 'appId' => $ebay['credentials']['prod']['appId'],
                 'devId' => $ebay['credentials']['prod']['devId'],
                 'certId' => $ebay['credentials']['prod']['certId'],
-            ],
+            ];
+        }
+
+        $config = [
+            'apiVersion' => \DTS\eBaySDK\Shopping\Services\ShoppingService::API_VERSION,
+            'siteId'=> '3', // 3 ebay UK, 0-US, 2-Can, 15-aus, 16-austria, 23-belgium, 71 france // http://www.ebay.com/gds/ALL-EBAY-WORLD-SITES-/10000000204201621/g.html
+            'credentials' => $credentials,
         ];
+
         return $config;
     }
 
@@ -48,16 +64,7 @@ class HomeController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $item = $form->getData();
 
-            $em = $this->getDoctrine()->getManager();
-
-            $exists = $em->getRepository(Item::class)->findOneByItemId($item->getItemId());
-            if (!$exists){
-                $em->persist($item);
-                $em->flush();
-                return $this->redirectToRoute('app_home_getitem', ['item'=>$item->getId()]);
-            }
-
-            return $this->redirectToRoute('app_home_getitem', ['item'=>$exists->getId()]);
+            return $this->redirectToRoute('app_home_getitem', ['itemId'=>$item->getItemId()]);
         }
 
         return $this->render('index/itemSearch.html.twig', array(
@@ -66,17 +73,18 @@ class HomeController extends Controller
     }
 
     /**
-     * @Route("/getItem/{item}")
+     * @Route("/getItem/{itemId}")
      */
-    public function getItemAction(Item $item)
+    public function getItemAction($itemId)
     {
-        $config = $this->getConfig();
+        $config = $this->getConfig('prod');
 
         $data = "";
+        $em = $this->getDoctrine()->getManager();
         $service = new Services\ShoppingService($config);
 
         $request = new Types\GetSingleItemRequestType();
-        $request->ItemID = $item->getItemId();
+        $request->ItemID = $itemId;
         $response = $service->getSingleItem($request);
 
         if (isset($response->Errors)) {
@@ -89,21 +97,39 @@ class HomeController extends Controller
                 );
             }
         }
+        $ebayItem = $response->Item;
 
         if ($response->Ack !== 'Failure') {
-            $ebayItem = $response->Item;
+            $exists = $em->getRepository(Item::class)->findOneByItemId($itemId);
 
-            $em = $this->getDoctrine()->getManager();
-            $item->setCountry($ebayItem->Country);
-            $item->setEndTime($ebayItem->EndTime);
-            $item->setTitle($ebayItem->Title);
-            $item->setGalleryURL($ebayItem->GalleryURL);
-            $item->setPrimaryCategoryName($ebayItem->PrimaryCategoryName);
-            $item->setUpdated(new \DateTime());
-            $em->persist($item);
-            $em->flush();
+            if (!$exists){
+
+                $em = $this->getDoctrine()->getManager();
+
+                $item = new Item();
+                $item->setItemId($itemId);
+                $item->setCountry($ebayItem->Country);
+                $item->setTitle($ebayItem->Title);
+                $item->setGalleryURL($ebayItem->GalleryURL);
+                $item->setPrimaryCategoryName($ebayItem->PrimaryCategoryName);
+                $item->setUpdated(new \DateTime());
+                $item->setPrimaryCategoryName($ebayItem->PrimaryCategoryName);
+                $item->setPrimaryCategoryId($ebayItem->PrimaryCategoryID);
+                $item->setBidCount($ebayItem->BidCount);
+                $item->setAutoPay($ebayItem->AutoPay);
+                $item->setCountry($ebayItem->Country);
+                $item->setListingStatus($ebayItem->ListingStatus);
+                $item->setTimeLeft($ebayItem->TimeLeft);
+                $item->setEndTime($ebayItem->EndTime);
+                $item->setConditionName($ebayItem->ConditionDisplayName);
+                $item->setCreated(new \DateTime());
+
+                $em->persist($item);
+                $em->flush();
+            }
+
             dump($ebayItem); die;
-            
+
         }
 
         return $this->render('default/index.html.twig', ['data' => $data]);
