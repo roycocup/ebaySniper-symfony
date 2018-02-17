@@ -93,6 +93,11 @@ class Item
      */
     private $updated;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Bid", inversedBy="item")
+     */
+    private $bid;
+
 
 
     /**
@@ -300,7 +305,7 @@ class Item
     /**
      * Set listingStatus
      *
-     * @param integer $listingStatus
+     * @param string $listingStatus
      *
      * @return Item
      */
@@ -314,7 +319,7 @@ class Item
     /**
      * Get listingStatus
      *
-     * @return integer
+     * @return string
      */
     public function getListingStatus()
     {
@@ -324,7 +329,7 @@ class Item
     /**
      * Set timeLeft
      *
-     * @param integer $timeLeft
+     * @param string $timeLeft
      *
      * @return Item
      */
@@ -338,7 +343,7 @@ class Item
     /**
      * Get timeLeft
      *
-     * @return integer
+     * @return string
      */
     public function getTimeLeft()
     {
@@ -439,5 +444,29 @@ class Item
     public function getUpdated()
     {
         return $this->updated;
+    }
+
+    /**
+     * Set bid
+     *
+     * @param \AppBundle\Entity\Bid $bid
+     *
+     * @return Item
+     */
+    public function setBid(\AppBundle\Entity\Bid $bid = null)
+    {
+        $this->bid = $bid;
+
+        return $this;
+    }
+
+    /**
+     * Get bid
+     *
+     * @return \AppBundle\Entity\Bid
+     */
+    public function getBid()
+    {
+        return $this->bid;
     }
 }

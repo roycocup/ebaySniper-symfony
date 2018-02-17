@@ -1,0 +1,39 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Bid
+ *
+ * @ORM\Table(name="bid")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\BidRepository")
+ */
+class Bid
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Item", mappedBy="bid")
+     */
+    private $item;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="timeBeforeClose", type="integer")
+     */
+    private $timeBeforeClose;
+
+    
+}
+

@@ -19,7 +19,6 @@
                     {{ ebayItem.Title }} <br>
                     bids: {{ ebayItem.BidCount }} price: £{{ ebayItem.ConvertedCurrentPrice.value }} <br>
                     ends: {{ ebayItem.EndTime.format('d-m-Y H:i:s') }} <br>
-                    {#time left: {{ timeleft.format('%d days, %H hours, %m minutes, %s seconds') }} <br>#}
                     Time left: <span id="timer">0 Days, 0 Hours, 0 Seconds</span>
                 </div>
             </div>
@@ -32,9 +31,11 @@
 
 {% block javascripts %}
     <script>
-        let T = new Timer({{ timeLeftSecs }}, "timer");
-        T.start();
-        //timer({{ timeLeftSecs }}, "timer");
+        let timeLeftSecs = '{{ timeLeftSecs }}';
+        if (timeLeftSecs > 0 && timeLeftSecs.length > 0){
+            let T = new Timer(timeLeftSecs, "timer");
+            T.start();
+        }
     </script>
 {% endblock %}
 
