@@ -17,3 +17,14 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
+
+    ebay:
+        credentials:
+            sandbox:
+                appId: RodrigoD-Sniper-SBX-15d8a3c47-e9af0ddb
+                devId: ce38d005-b839-493c-82ba-efdc20a519cd
+                certId: SBX-5d8a3c4799cc-54e4-4d61-aebf-4a59
+            prod:
+                appId: RodrigoD-Sniper-PRD-a5d8a3c47-b5b29b79
+                devId: ce38d005-b839-493c-82ba-efdc20a519cd
+                certId: PRD-5d8a3c4753ce-49ae-4c78-9ad9-013c
